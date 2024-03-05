@@ -7,11 +7,11 @@
             Board board = new();
             IPlayer XPlayer = new Human();
             IPlayer OPlayer = new Bot(false, board);
-            while (board.GetMoveCount() != 9 && board.Winner() == 0)
+            while (board.MoveCount != 9 && board.Winner() == 0)
             {
-                Console.WriteLine('\n' + (board.GetTurn() ? "X" : "Y") + " turn");
+                Console.WriteLine('\n' + (board.IsXTurn ? "X" : "Y") + " turn");
                 Console.WriteLine(board);
-                if (board.GetTurn())
+                if (board.IsXTurn)
                 {
                     board.Move(XPlayer.Move());
                 }

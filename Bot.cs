@@ -33,7 +33,7 @@ namespace TicTacToe
         public int Minimax(bool IsXTurn)
         {
             int winner = board.Winner();
-            if (board.GetMoveCount() == 9 || winner != 0)
+            if (board.MoveCount == 9 || winner != 0)
             {
                 return winner;  // Positive score if X wins, negative if O wins, and 0 if the game ends in a draw
             }

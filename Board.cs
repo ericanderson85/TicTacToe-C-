@@ -8,39 +8,39 @@ namespace TicTacToe
     }
     public class Board
     {
-        private readonly Mark[] Squares;  // Represents the board
-        private bool IsXTurn;
-        private int MoveCount;
+        private readonly Mark[] _squares;  // Represents the board
+        private bool _isXTurn;
+        private int _moveCount;
 
         public Board()
         {
-            Squares = new Mark[9] { Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty };
-            IsXTurn = true;
-            MoveCount = 0;
+            _squares = new Mark[9] { Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty, Mark.Empty };
+            _isXTurn = true;
+            _moveCount = 0;
         }
 
         public bool Move(int index)
         {
-            if (index < 0 || index > 8 || Squares[index] != Mark.Empty)
+            if (index < 0 || index > 8 || _squares[index] != Mark.Empty)
             {
                 return false; // Invalid move
             }
 
-            Squares[index] = IsXTurn ? Mark.X : Mark.O;
-            IsXTurn = !IsXTurn;
-            MoveCount++;
+            _squares[index] = _isXTurn ? Mark.X : Mark.O;
+            _isXTurn = !_isXTurn;
+            _moveCount++;
             return true;
         }
 
         public bool UndoMove(int index)
         {
-            if (index < 0 || index > 8 || Squares[index] == Mark.Empty)
+            if (index < 0 || index > 8 || _squares[index] == Mark.Empty)
             {
                 return false; // Invalid move
             }
-            Squares[index] = Mark.Empty;
-            IsXTurn = !IsXTurn;
-            MoveCount--;
+            _squares[index] = Mark.Empty;
+            _isXTurn = !_isXTurn;
+            _moveCount--;
             return true;
         }
 
@@ -49,58 +49,54 @@ namespace TicTacToe
             // Check columns
             for (int col = 0; col < 3; col++)
             {
-                if (Squares[col] != Mark.Empty && Squares[col] == Squares[col + 3] && Squares[col + 3] == Squares[col + 6])
+                if (_squares[col] != Mark.Empty && _squares[col] == _squares[col + 3] && _squares[col + 3] == _squares[col + 6])
                 {
-                    return Squares[col] == Mark.X ? 10 - MoveCount : MoveCount - 10;
+                    return _squares[col] == Mark.X ? 10 - _moveCount : _moveCount - 10;
                 }
             }
 
             // Check rows
             for (int row = 0; row < 3; row++)
             {
-                if (Squares[3 * row] != Mark.Empty && Squares[3 * row] == Squares[3 * row + 1] && Squares[3 * row + 1] == Squares[3 * row + 2])
+                if (_squares[3 * row] != Mark.Empty && _squares[3 * row] == _squares[3 * row + 1] && _squares[3 * row + 1] == _squares[3 * row + 2])
                 {
-                    return Squares[3 * row] == Mark.X ? 10 - MoveCount : MoveCount - 10;
+                    return _squares[3 * row] == Mark.X ? 10 - _moveCount : _moveCount - 10;
                 }
             }
 
-            Mark center = Squares[4];
+            Mark center = _squares[4];
             if (center == Mark.Empty)
             {
                 return 0;
             }
 
             // Check TL -> BR diagonal
-            if (center == Squares[0] && Squares[0] == Squares[8])
+            if (center == _squares[0] && _squares[0] == _squares[8])
             {
-                return Squares[0] == Mark.X ? 10 - MoveCount : MoveCount - 10;
+                return _squares[0] == Mark.X ? 10 - _moveCount : _moveCount - 10;
             }
 
             // Check BL -> TR diagonal
-            if (center == Squares[2] && Squares[2] == Squares[6])
+            if (center == _squares[2] && _squares[2] == _squares[6])
             {
-                return Squares[2] == Mark.X ? 10 - MoveCount : MoveCount - 10;
+                return _squares[2] == Mark.X ? 10 - _moveCount : _moveCount - 10;
             }
 
             return 0;
         }
 
-        public bool GetTurn()
+        public bool IsXTurn => _isXTurn;
+        public int MoveCount => _moveCount;
+
+        public Mark this[int index]
         {
-            return IsXTurn;
+            get
+            {
+                if (index < 0 || index > 8) throw new IndexOutOfRangeException("Index must be within the range 0 to 8");
+                return _squares[index];
+            }
         }
 
-        public Mark GetTile(int index)
-        {
-            if (index < 0 || index > 8) throw new IndexOutOfRangeException();
-
-            return Squares[index];
-        }
-
-        public int GetMoveCount()
-        {
-            return MoveCount;
-        }
 
         public override string ToString()
         {
@@ -111,7 +107,7 @@ namespace TicTacToe
                 {
                     str += "\n\n";
                 }
-                switch (Squares[i])
+                switch (_squares[i])
                 {
                     case Mark.Empty:
                         str += " ~ ";
